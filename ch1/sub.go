@@ -6,6 +6,6 @@ func Sub() {
 	// commandline_args()
 	// envVars()
 	// slice()
-	maps()
-	// defers()
+	// maps()
+	defers()
 }
