@@ -8,5 +8,6 @@ func Sub() {
 	// slice()
 	// maps()
 	// defers()
-	strings_builder()
+	// strings_builder()
+	times()
 }
