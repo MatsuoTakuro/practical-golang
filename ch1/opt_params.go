@@ -19,7 +19,7 @@ type Udon struct {
 	ebiten   uint
 }
 
-func opt_args() {
+func opt_params() {
 	opt := &Option{Large, true, 2}
 	udon := newUdonByStruct(*opt)
 	fmt.Println(*udon)
