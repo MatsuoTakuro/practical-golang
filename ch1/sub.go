@@ -4,5 +4,8 @@ func Sub() {
 	// enum()
 	// opt_params()
 	// commandline_args()
-	envVars()
+	// envVars()
+	// slice()
+	maps()
+	// defers()
 }
