@@ -1,5 +1,6 @@
 package ch1
 
 func Sub() {
-	enum()
+	// enum()
+	opt_args()
 }
