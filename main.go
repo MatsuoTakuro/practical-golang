@@ -2,8 +2,8 @@ package main
 
 import "fmt"
 
-//go:generate stringer -type=CarType
-//go:generate stringer -type=CarOption
+//go:generate enumer -type=CarType -json
+//go:generate enumer -type=CarOption -json
 
 type CarType int
 type CarOption uint64
@@ -36,6 +36,17 @@ func carType() {
 	fmt.Println(t)
 	t = Sedan
 	fmt.Println(t)
+
+	carTypes := CarTypeValues()
+	for _, ct := range carTypes {
+		fmt.Println(ct)
+	}
+
+	t, _ = CarTypeString("MPV")
+	fmt.Println(t)
+
+	b, _ := t.MarshalJSON()
+	fmt.Println(string(b))
 }
 
 func carOption() {
