@@ -7,5 +7,6 @@ func Sub() {
 	// envVars()
 	// slice()
 	// maps()
-	defers()
+	// defers()
+	strings_builder()
 }
