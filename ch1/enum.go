@@ -1,4 +1,4 @@
-package enum
+package ch1
 
 import "fmt"
 
@@ -26,7 +26,7 @@ const (
 	DriverAssist                       // 10000(2) = 16(10)
 )
 
-func Sub() {
+func enum() {
 	carType()
 	carOption()
 }

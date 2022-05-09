@@ -1,7 +1,7 @@
 package main
 
-import enum "github.com/MatsuoTakuro/practical-golang/ch1/eum"
+import ch1 "github.com/MatsuoTakuro/practical-golang/ch1"
 
 func main() {
-	enum.Sub()
+	ch1.Sub()
 }
