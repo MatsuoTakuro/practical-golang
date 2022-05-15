@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-type Book struct {
+type Book2 struct {
 	Title      string
 	Author     string
 	Publisher  string
@@ -14,7 +14,7 @@ type Book struct {
 }
 
 func memberAccess() {
-	b := &Book{
+	b := &Book2{
 		Title: "Mithril",
 	}
 	fmt.Println(b.Title)
