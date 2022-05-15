@@ -5,5 +5,6 @@ func Sub() {
 	// with_method()
 	// consumers()
 	// skuCode()
-	season()
+	// season()
+	confidential()
 }
