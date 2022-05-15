@@ -4,5 +4,6 @@ func Sub() {
 	// memberAccess()
 	// generics()
 	// oreillyBook()
-	tag()
+	// tag()
+	structDesign()
 }
