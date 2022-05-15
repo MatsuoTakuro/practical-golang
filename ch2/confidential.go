@@ -33,5 +33,5 @@ func (c CreditCard) String() string {
 }
 
 func (c CreditCard) GoString() string {
-	return "xxxx-xxxx-xxxx-xxxx"
+	return c.String()
 }
