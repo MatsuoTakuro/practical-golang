@@ -5,5 +5,7 @@ func Sub() {
 	// generics()
 	// oreillyBook()
 	// tag()
-	structDesign()
+	// structDesign()
+	// emptyStruct()
+	pools()
 }
