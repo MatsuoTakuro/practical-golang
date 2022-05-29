@@ -7,11 +7,20 @@ require (
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
 )
 
-require go.uber.org/dig v1.14.1
+require (
+	go.uber.org/dig v1.14.1
+	golang.org/x/xerrors v0.0.0-20220517211312-f3a8303e98df
+)
+
+require (
+	go.uber.org/atomic v1.7.0 // indirect
+	go.uber.org/multierr v1.8.0 // indirect
+)
 
 require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751 // indirect
 	github.com/alecthomas/units v0.0.0-20211218093645-b94a6e3cc137 // indirect
+	github.com/avast/retry-go v3.0.0+incompatible
 	github.com/gen2brain/beeep v0.0.0-20220402123239-6a3042f4b71a
 	github.com/go-toast/toast v0.0.0-20190211030409-01e6764cf0a4 // indirect
 	github.com/godbus/dbus/v5 v5.1.0 // indirect
