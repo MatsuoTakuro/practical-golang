@@ -9,13 +9,11 @@ require (
 
 require (
 	go.uber.org/dig v1.14.1
+	go.uber.org/multierr v1.8.0
 	golang.org/x/xerrors v0.0.0-20220517211312-f3a8303e98df
 )
 
-require (
-	go.uber.org/atomic v1.7.0 // indirect
-	go.uber.org/multierr v1.8.0 // indirect
-)
+require go.uber.org/atomic v1.7.0 // indirect
 
 require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751 // indirect
