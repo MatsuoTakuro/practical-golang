@@ -9,5 +9,6 @@ func Sub() {
 	// maps()
 	// defers()
 	// strings_builder()
-	times()
+	// times()
+	kingpinSample()
 }
