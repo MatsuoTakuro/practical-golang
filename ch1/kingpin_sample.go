@@ -16,13 +16,15 @@ var (
 	postText    = post.Arg("text", "text to post").String()
 )
 
+// refer to sample code in https://pkg.go.dev/gopkg.in/alecthomas/kingpin.v2
+
 // sample for register command
 // ❯ go run main.go register nick name
 // 1: nick
 // 2: name
 
 // sample for post command
-// ❯ go run main.go post --image=/Users/user/training/go/practical-golang/ch1/example.png  channel1 test1,test2
+// ❯ go run main.go post --image=/Users/user/training/go/practical-golang/ch1/example.png channel1 test1,test2
 // 1: channel1
 // 2: /Users/user/training/go/practical-golang/ch1/example.png
 // 3: test1,test2
