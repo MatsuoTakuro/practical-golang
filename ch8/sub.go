@@ -16,7 +16,11 @@ func Sub() {
 	// encode()
 	// marshal()
 	// encodeSlice()
-	omitEmpty()
+	// omitEmpty()
+	// disallowUnkownFields()
+	// extendMarshalJSON()
+	// extendUnmarshalJSON()
+	rawMessage()
 }
 
 // Prepare individual structures as much as possible.
