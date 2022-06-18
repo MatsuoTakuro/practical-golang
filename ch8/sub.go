@@ -27,7 +27,8 @@ func Sub() {
 	// gocsvUnmarshal()
 	// gocsvMarshalChan()
 	// gocsvUnmarshalToChan()
-	multiLayout()
+	// multiLayout()
+	fixedLengthData()
 }
 
 // Prepare individual structures as much as possible.
