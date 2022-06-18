@@ -20,7 +20,14 @@ func Sub() {
 	// disallowUnkownFields()
 	// extendMarshalJSON()
 	// extendUnmarshalJSON()
-	rawMessage()
+	// rawMessage()
+	// readCsv()
+	// writeCsv()
+	// gocsvMarshal()
+	// gocsvUnmarshal()
+	// gocsvMarshalChan()
+	// gocsvUnmarshalToChan()
+	multiLayout()
 }
 
 // Prepare individual structures as much as possible.

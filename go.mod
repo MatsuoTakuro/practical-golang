@@ -13,7 +13,12 @@ require (
 	golang.org/x/xerrors v0.0.0-20220517211312-f3a8303e98df
 )
 
-require go.uber.org/atomic v1.7.0 // indirect
+require github.com/gocarina/gocsv v0.0.0-20220531201732-5f969b02b902 // indirect
+
+require (
+	github.com/spkg/bom v1.0.0
+	go.uber.org/atomic v1.7.0 // indirect
+)
 
 require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751 // indirect
