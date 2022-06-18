@@ -14,3 +14,9 @@ run-mac-m1: && exec
 
 exec:
   @./{{artifact_name}}
+
+create-db:
+  docker run -d --name my-postgres -e POSTGRES_USER=testuser -e POSTGRES_PASSWORD=pass -e POSTGRES_DB=testdb -p 5432:5432 postgres
+
+db-in:
+  docker exec -it my-postgres bash -c "psql testdb -U testuser"
