@@ -23,11 +23,15 @@ func Sub() {
 	// querySingleLine()
 	// rollbackWithDefer()
 	// seperateTxCtrlAndImpl()
-	cancel()
+	// cancel()
+	loggingWithDriver()
+	loggingWithExtendedDriver()
 }
 
+var configValues string = "host=localhost port=5432 user=testuser dbname=testdb password=pass sslmode=disable"
+
 func connectToPgx() {
-	db, dbErr = sql.Open("pgx", "host=localhost port=5432 user=testuser dbname=testdb password=pass sslmode=disable")
+	db, dbErr = sql.Open("pgx", configValues)
 	if nil != dbErr {
 		log.Fatal(dbErr)
 	}
