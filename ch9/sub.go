@@ -21,8 +21,9 @@ func init() {
 func Sub() {
 	// queryMultiLines()
 	// querySingleLine()
-	rollbackWithDefer()
-	seperateTxCtrlAndImpl()
+	// rollbackWithDefer()
+	// seperateTxCtrlAndImpl()
+	cancel()
 }
 
 func connectToPgx() {
