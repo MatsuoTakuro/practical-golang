@@ -13,9 +13,9 @@ var dbErr error
 func init() {
 	connectToPgx()
 	createUsersTable()
-	InsertInitialUsers()
+	initializeUsersTable()
 	createProductsTable()
-	InsertInitialProducts()
+	initializeProductsTable()
 }
 
 func Sub() {
@@ -24,8 +24,11 @@ func Sub() {
 	// rollbackWithDefer()
 	// seperateTxCtrlAndImpl()
 	// cancel()
-	loggingWithDriver()
-	loggingWithExtendedDriver()
+	// loggingWithDriver()
+	// loggingWithExtendedDriver()
+	// preparedStmt()
+	// batchInsert()
+	builtinDbFuncs()
 }
 
 var configValues string = "host=localhost port=5432 user=testuser dbname=testdb password=pass sslmode=disable"
@@ -50,16 +53,21 @@ func createUsersTable() {
 	}
 }
 
-func InsertInitialUsers() {
-	cmdU := `INSERT INTO users(
+func initializeUsersTable() {
+	cmd := `DELETE FROM users;`
+	_, err := db.Exec(cmd)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	cmd = `INSERT INTO users(
 		user_id,
 		user_name,
 		created_at
 	)
 	VALUES('0001', 'Gopher', '2020-07-10 00:00:00.000000+00'),
 				('0002', 'Ferris', '2020-07-11 00:00:00.000000+00')`
-	// TODO: handle this -> ERROR: duplicate key value violates unique constraint "pk_users" (SQLSTATE 23505)
-	_, err := db.Exec(cmdU)
+	_, err = db.Exec(cmd)
 	if err != nil {
 		log.Println(err)
 	}
@@ -67,10 +75,10 @@ func InsertInitialUsers() {
 
 func createProductsTable() {
 	cmdU := `CREATE TABLE IF NOT EXISTS products(
-		product_id varchar(32) NOT NULL,
-		product_name varchar(100) NOT NULL,
+		product_no integer NOT NULL,
+		name varchar(100) NOT NULL,
 		price integer NOT NULL,
-		CONSTRAINT pk_products PRIMARY KEY (product_id)
+		CONSTRAINT pk_products PRIMARY KEY (product_no)
 	)`
 	_, err := db.Exec(cmdU)
 	if err != nil {
@@ -78,16 +86,21 @@ func createProductsTable() {
 	}
 }
 
-func InsertInitialProducts() {
-	cmdU := `INSERT INTO products(
-		product_id,
-		product_name,
+func initializeProductsTable() {
+	cmd := `DELETE FROM products;`
+	_, err := db.Exec(cmd)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	cmd = `INSERT INTO products(
+		product_no,
+		name,
 		price
 	)
-	VALUES('0001', 'X', 1000),
-				('0002', 'Y', 2000)`
-	// TODO: handle this -> ERROR: duplicate key value violates unique constraint "pk_products" (SQLSTATE 23505)
-	_, err := db.Exec(cmdU)
+	VALUES(1, 'X', 1000),
+				(2, 'Y', 2000)`
+	_, err = db.Exec(cmd)
 	if err != nil {
 		log.Println(err)
 	}
