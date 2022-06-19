@@ -89,7 +89,7 @@ func batchInsert() {
 	}
 }
 
-func builtinDbFuncs() {
+func builtInDbFuncs() {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
 
