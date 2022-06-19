@@ -28,7 +28,8 @@ func Sub() {
 	// loggingWithExtendedDriver()
 	// preparedStmt()
 	// batchInsert()
-	builtInDbFuncs()
+	// builtInDbFuncs()
+	commonColumns()
 }
 
 var configValues string = "host=localhost port=5432 user=testuser dbname=testdb password=pass sslmode=disable"
