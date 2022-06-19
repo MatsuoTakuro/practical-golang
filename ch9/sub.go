@@ -2,17 +2,16 @@ package ch9
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 
 	_ "github.com/jackc/pgx/v4/stdlib"
 )
 
-var Db *sql.DB
+var db *sql.DB
 var dbErr error
 
 func init() {
-	Db, dbErr = sql.Open("pgx", "host=localhost port=5432 user=testuser dbname=testdb password=pass sslmode=disable")
+	db, dbErr = sql.Open("pgx", "host=localhost port=5432 user=testuser dbname=testdb password=pass sslmode=disable")
 	if nil != dbErr {
 		log.Fatal(dbErr)
 	}
@@ -24,7 +23,7 @@ func init() {
 		CONSTRAINT pk_users PRIMARY KEY (user_id)
 	)`
 
-	_, err := Db.Exec(cmdU)
+	_, err := db.Exec(cmdU)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -42,12 +41,13 @@ func InsertInitialUsers() {
 				('0002', 'Ferris', '2020-07-11 00:00:00.000000+00')`
 
 	// TODO: handle this -> ERROR: duplicate key value violates unique constraint "pk_users" (SQLSTATE 23505)
-	_, err := Db.Exec(cmdU)
+	_, err := db.Exec(cmdU)
 	if err != nil {
 		log.Println(err)
 	}
 }
 
 func Sub() {
-	fmt.Println(Db)
+	queryMultiLines()
+	querySingleLine()
 }
