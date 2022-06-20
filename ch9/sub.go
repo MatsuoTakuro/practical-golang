@@ -10,13 +10,13 @@ import (
 var db *sql.DB
 var dbErr error
 
-func init() {
-	connectToPgx()
-	createUsersTable()
-	initializeUsersTable()
-	createProductsTable()
-	initializeProductsTable()
-}
+// func init() {
+// 	connectToPgx()
+// 	createUsersTable()
+// 	initializeUsersTable()
+// 	createProductsTable()
+// 	initializeProductsTable()
+// }
 
 func Sub() {
 	// queryMultiLines()
@@ -55,7 +55,7 @@ func createUsersTable() {
 }
 
 func initializeUsersTable() {
-	cmd := `DELETE FROM users;`
+	cmd := `TRUNCATE users;`
 	_, err := db.Exec(cmd)
 	if err != nil {
 		log.Fatal(err)
@@ -88,7 +88,7 @@ func createProductsTable() {
 }
 
 func initializeProductsTable() {
-	cmd := `DELETE FROM products;`
+	cmd := `TRUNCATE products;`
 	_, err := db.Exec(cmd)
 	if err != nil {
 		log.Fatal(err)

@@ -14,6 +14,7 @@ require (
 )
 
 require (
+	github.com/DATA-DOG/go-sqlmock v1.5.0 // indirect
 	github.com/gocarina/gocsv v0.0.0-20220531201732-5f969b02b902 // indirect
 	github.com/ianlopshire/go-fixedwidth v0.9.2 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
