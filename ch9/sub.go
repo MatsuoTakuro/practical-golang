@@ -10,13 +10,13 @@ import (
 var db *sql.DB
 var dbErr error
 
-// func init() {
-// 	connectToPgx()
-// 	createUsersTable()
-// 	initializeUsersTable()
-// 	createProductsTable()
-// 	initializeProductsTable()
-// }
+func init() {
+	connectToPgx()
+	createUsersTable()
+	initializeUsersTable()
+	createProductsTable()
+	initializeProductsTable()
+}
 
 func Sub() {
 	// queryMultiLines()
@@ -29,7 +29,8 @@ func Sub() {
 	// preparedStmt()
 	// batchInsert()
 	// builtInDbFuncs()
-	commonColumns()
+	// commonColumns()
+	sqlboiler()
 }
 
 var configValues string = "host=localhost port=5432 user=testuser dbname=testdb password=pass sslmode=disable"

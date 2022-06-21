@@ -20,3 +20,6 @@ create-db:
 
 db-in:
   docker exec -it my-postgres bash -c "psql testdb -U testuser"
+
+sqlboiler:
+  sqlboiler psql -c ch9/sqlboiler.toml -o ch9/models -p models --no-tests --wipe
