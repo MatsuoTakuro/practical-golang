@@ -23,3 +23,6 @@ db-in:
 
 sqlboiler:
   sqlboiler psql -c ch9/sqlboiler.toml -o ch9/models -p models --no-tests --wipe
+
+sqlc:
+  sqlc generate -f ch9/sqlc.json
