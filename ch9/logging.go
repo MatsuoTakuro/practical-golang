@@ -13,15 +13,15 @@ import (
 )
 
 // implement Logger interface
-type logger struct{}
+type loggerImpl struct{}
 
-func (l *logger) Log(ctx context.Context, level pgx.LogLevel, msg string, data map[string]interface{}) {
+func (l *loggerImpl) Log(ctx context.Context, level pgx.LogLevel, msg string, data map[string]interface{}) {
 	if msg == "Query" {
 		log.Printf("SQL:\n%v\nARGS:%v\n", data["sql"], data["args"])
 	}
 }
 
-var _ pgx.Logger = (*logger)(nil)
+var _ pgx.Logger = (*loggerImpl)(nil)
 
 type PgTable struct {
 	SchemaName string
@@ -35,7 +35,7 @@ func loggingWithDriver() {
 	if err != nil {
 		log.Fatalf("parse config: %v\n", err)
 	}
-	config.Logger = &logger{}
+	config.Logger = &loggerImpl{}
 
 	conn, err := pgx.ConnectConfig(ctx, config)
 	if err != nil {
