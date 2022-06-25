@@ -10,6 +10,7 @@ require (
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/friendsofgo/errors v0.9.2
+	github.com/go-playground/validator/v10 v10.11.0
 	github.com/gocarina/gocsv v0.0.0-20220531201732-5f969b02b902
 	github.com/ianlopshire/go-fixedwidth v0.9.2
 	github.com/jackc/pgx/v4 v4.16.1
@@ -26,6 +27,8 @@ require (
 )
 
 require (
+	github.com/go-playground/locales v0.14.0 // indirect
+	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/gofrs/uuid v4.0.0+incompatible // indirect
 	github.com/google/go-cmp v0.5.8 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
@@ -37,6 +40,7 @@ require (
 	github.com/jackc/pgtype v1.11.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
+	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/lib/pq v1.10.6 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/spf13/cast v1.5.0 // indirect
