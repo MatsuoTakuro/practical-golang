@@ -3,5 +3,6 @@ package ch10
 func Sub() {
 	// jsons()
 	// required()
-	queryParams()
+	// queryParams()
+	uploadFile()
 }
