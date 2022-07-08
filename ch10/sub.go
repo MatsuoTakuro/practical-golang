@@ -5,5 +5,6 @@ func Sub() {
 	// required()
 	// queryParams()
 	// uploadFile()
-	multiplexer()
+	// multiplexer()
+	middleware()
 }
