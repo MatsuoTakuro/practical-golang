@@ -6,5 +6,6 @@ func Sub() {
 	// queryParams()
 	// uploadFile()
 	// multiplexer()
-	middleware()
+	// middleware()
+	captureStatusCode()
 }
