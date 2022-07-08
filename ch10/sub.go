@@ -4,5 +4,6 @@ func Sub() {
 	// jsons()
 	// required()
 	// queryParams()
-	uploadFile()
+	// uploadFile()
+	multiplexer()
 }
