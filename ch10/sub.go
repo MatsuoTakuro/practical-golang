@@ -8,5 +8,6 @@ func Sub() {
 	// multiplexer()
 	// middleware()
 	// captureStatusCode()
-	recoveryFromPanic()
+	// recoveryFromPanic()
+	controlTranx()
 }
