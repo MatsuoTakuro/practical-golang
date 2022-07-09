@@ -7,5 +7,6 @@ func Sub() {
 	// uploadFile()
 	// multiplexer()
 	// middleware()
-	captureStatusCode()
+	// captureStatusCode()
+	recoveryFromPanic()
 }
