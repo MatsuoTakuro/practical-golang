@@ -9,5 +9,6 @@ func Sub() {
 	// middleware()
 	// captureStatusCode()
 	// recoveryFromPanic()
-	controlTranx()
+	// controlTranx()
+	timeout()
 }
