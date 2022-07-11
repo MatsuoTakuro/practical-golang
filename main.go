@@ -10,7 +10,8 @@ import (
 	// ch7 "github.com/MatsuoTakuro/practical-golang/ch7"
 	// ch8 "github.com/MatsuoTakuro/practical-golang/ch8"
 	// ch9 "github.com/MatsuoTakuro/practical-golang/ch9"
-	ch10 "github.com/MatsuoTakuro/practical-golang/ch10"
+	// ch10 "github.com/MatsuoTakuro/practical-golang/ch10"
+	ch11 "github.com/MatsuoTakuro/practical-golang/ch11"
 )
 
 var version string
@@ -25,5 +26,6 @@ func main() {
 	// ch7.Sub(version)
 	// ch8.Sub()
 	// ch9.Sub()
-	ch10.Sub()
+	// ch10.Sub()
+	ch11.Sub()
 }
