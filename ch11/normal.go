@@ -83,6 +83,7 @@ func httpClient() {
 	if err != nil {
 		panic(err)
 	}
+	defer resp.Body.Close()
 	fmt.Println("Status code is\n", resp.StatusCode)
 
 	body, err := ioutil.ReadAll(resp.Body)
