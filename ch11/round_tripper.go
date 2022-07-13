@@ -228,6 +228,7 @@ func (rt *retryRoundTripper) RoundTrip(req *http.Request) (*http.Response, error
 			return resp, err
 		}
 
+		// donot use time.Sleep
 		select {
 		case <-req.Context().Done():
 			return nil, req.Context().Err()

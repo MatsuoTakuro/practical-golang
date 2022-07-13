@@ -2,5 +2,6 @@ package ch11
 
 func Sub() {
 	// normal()
-	roundTripper()
+	// roundTripper()
+	proxy()
 }

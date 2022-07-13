@@ -16,3 +16,5 @@
 practical-golang
 *.log
 practical-golang.code-workspace
+
+*.key
