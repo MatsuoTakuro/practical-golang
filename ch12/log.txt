@@ -1,0 +1,1 @@
+2022/07/16 10:25:02 Log outputs both file and stderr at the same time
