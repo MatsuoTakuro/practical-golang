@@ -4,5 +4,6 @@ func Sub() {
 	// logOutput()
 	// structured_logging()
 	// middleware()
-	forceQuit()
+	// forceQuit()
+	customize()
 }
