@@ -5,5 +5,6 @@ func Sub() {
 	// structured_logging()
 	// middleware()
 	// forceQuit()
-	customize()
+	// customize()
+	openTelemetry()
 }
