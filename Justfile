@@ -33,6 +33,9 @@ sqlboiler:
 sqlc:
   sqlc generate -f ch9/sqlc.json
 
-jaeger:
-  # see jaeger at http://localhost:16686
+start-otel:
   docker run -d --name jaeger --rm -p 14268:14268 -p 16686:16686 jaegertracing/all-in-one:1.36
+  echo "view Jaeger UI at http://localhost:16686"
+
+stop-otel:
+  docker stop jaeger
