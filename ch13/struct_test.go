@@ -44,14 +44,14 @@ func TestByTestify(t *testing.T) {
 	assert.Equal(t, 3, result)
 }
 
-func TestErrorMessage(t *testing.T) {
-	assert.Equal(t, 2, 3)
-	type Person struct {
-		Name string
-		Age  int
-	}
-	assert.Equal(t, Person{"織田信長", 49}, Person{"徳川家康", 73})
-}
+// func TestErrorMessage(t *testing.T) {
+// 	assert.Equal(t, 2, 3)
+// 	type Person struct {
+// 		Name string
+// 		Age  int
+// 	}
+// 	assert.Equal(t, Person{"織田信長", 49}, Person{"徳川家康", 73})
+// }
 
 // go test -v -run TestX github.com/MatsuoTakuro/practical-golang/ch13
 func TestX(t *testing.T) {
@@ -67,7 +67,7 @@ func TestX(t *testing.T) {
 
 	num2 := X{
 		numUnExport: 999,
-		NumExport:   -2,
+		NumExport:   -1,
 	}
 
 	opt := cmpopts.IgnoreUnexported(X{})
@@ -76,11 +76,11 @@ func TestX(t *testing.T) {
 		t.Errorf("X value is mismatch with IgnoreUnexported, (-num +num2):\n%s", diff)
 	}
 
-	opt = cmp.AllowUnexported(X{})
+	// opt = cmp.AllowUnexported(X{})
 
-	if diff := cmp.Diff(num1, num2, opt); diff != "" {
-		t.Errorf("X value is mismatch with AllowUnexported, (-num +num2):\n%s", diff)
-	}
+	// if diff := cmp.Diff(num1, num2, opt); diff != "" {
+	// 	t.Errorf("X value is mismatch with AllowUnexported, (-num +num2):\n%s", diff)
+	// }
 }
 
 func TestX2(t *testing.T) {

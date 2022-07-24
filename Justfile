@@ -39,3 +39,9 @@ start-otel:
 
 stop-otel:
   docker stop jaeger
+
+cover: && html
+  go test ./ch13 -coverprofile=./ch13/coverage.out
+
+html:
+  go tool cover -html=./ch13/coverage.out
