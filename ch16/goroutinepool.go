@@ -11,7 +11,16 @@ import (
 )
 
 func workerPool() {
-	TotalFileSize()
+
+	// fmt.Println("TotalFileSize()", TotalFileSize())
+
+	taskSrcs := []Task{
+		"/Users/user/training/go/practical-golang/ch16/goroutine.go",
+		"/Users/user/training/go/practical-golang/ch16/goroutinepool.go",
+		"/Users/user/training/go/practical-golang/ch16/lock.go",
+		"/Users/user/training/go/practical-golang/ch16/sub.go",
+	}
+	fmt.Println("TotalFileSizeWithFixedTasks()", TotalFileSizeWithFixedTasks(taskSrcs))
 }
 
 type Task string
@@ -62,6 +71,36 @@ func TotalFileSize() int64 {
 			}
 		}
 	}
+}
+
+func TotalFileSizeWithFixedTasks(taskSrcs []Task) int64 {
+	tasks := make(chan Task, len(taskSrcs))
+	results := make(chan Result)
+	for _, src := range taskSrcs {
+		tasks <- src
+	}
+	close(tasks)
+
+	for i := 0; i < runtime.NumCPU(); i++ {
+		go worker(i, tasks, results)
+	}
+
+	var count int
+	var totalSize int64
+	for {
+		result := <-results
+		count += 1
+		if result.Err != nil {
+			fmt.Printf("err %v for %s\n", result.Err, result.Task)
+		} else {
+			atomic.AddInt64(&totalSize, result.value)
+		}
+
+		if count == len(taskSrcs) {
+			break
+		}
+	}
+	return totalSize
 }
 
 func worker(id int, tasks <-chan Task, results chan<- Result) { // wait to receive a task
