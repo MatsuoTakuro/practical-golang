@@ -6,8 +6,9 @@ import (
 )
 
 func goroutine() {
-	loop1()
-	loop2()
+	// loop1()
+	// loop2()
+	chanWithForLoop()
 }
 
 func loop1() {
@@ -29,4 +30,17 @@ func loop2() {
 		}(v)
 	}
 	time.Sleep(time.Second)
+}
+
+func chanWithForLoop() {
+	ic := make(chan int)
+	go func() {
+		ic <- 10
+		ic <- 20
+		close(ic)
+	}()
+
+	for v := range ic {
+		fmt.Println(v)
+	}
 }
