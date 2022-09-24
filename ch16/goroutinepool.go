@@ -12,15 +12,15 @@ import (
 
 func workerPool() {
 
-	// fmt.Println("TotalFileSize()", TotalFileSize())
+	fmt.Println("TotalFileSize()", TotalFileSize())
 
-	taskSrcs := []Task{
-		"/Users/user/training/go/practical-golang/ch16/goroutine.go",
-		"/Users/user/training/go/practical-golang/ch16/goroutinepool.go",
-		"/Users/user/training/go/practical-golang/ch16/lock.go",
-		"/Users/user/training/go/practical-golang/ch16/sub.go",
-	}
-	fmt.Println("TotalFileSizeWithFixedTasks()", TotalFileSizeWithFixedTasks(taskSrcs))
+	// taskSrcs := []Task{
+	// 	"/Users/user/training/go/practical-golang/ch16/goroutine.go",
+	// 	"/Users/user/training/go/practical-golang/ch16/goroutinepool.go",
+	// 	"/Users/user/training/go/practical-golang/ch16/lock.go",
+	// 	"/Users/user/training/go/practical-golang/ch16/sub.go",
+	// }
+	// fmt.Println("TotalFileSizeWithFixedTasks()", TotalFileSizeWithFixedTasks(taskSrcs))
 }
 
 type Task string
@@ -36,7 +36,7 @@ func TotalFileSize() int64 {
 	results := make(chan Result)
 
 	for i := 0; i < runtime.NumCPU(); i++ {
-		go worker(i, tasks, results) // wait to receive a task and transmit a result
+		go fileSizeCalculator(i, tasks, results) // wait to receive a task and transmit a result
 	}
 
 	inputDone := make(chan struct{})
@@ -82,7 +82,7 @@ func TotalFileSizeWithFixedTasks(taskSrcs []Task) int64 {
 	close(tasks)
 
 	for i := 0; i < runtime.NumCPU(); i++ {
-		go worker(i, tasks, results)
+		go fileSizeCalculator(i, tasks, results)
 	}
 
 	var count int
@@ -103,14 +103,14 @@ func TotalFileSizeWithFixedTasks(taskSrcs []Task) int64 {
 	return totalSize
 }
 
-func worker(id int, tasks <-chan Task, results chan<- Result) { // wait to receive a task
+func fileSizeCalculator(id int, tasks <-chan Task, results chan<- Result) { // wait to receive a task
 	for t := range tasks {
-		fmt.Printf("worker: %d task: %s\n", id, t)
+		fmt.Printf("calculator: %d task: %s\n", id, t)
 
 		fi, err := os.Stat(string(t))
 
 		if err == nil && fi.IsDir() {
-			err = fmt.Errorf("worker: %d err: %s is dir", id, fi)
+			err = fmt.Errorf("calculator: %d err: %s is dir", id, fi)
 		}
 
 		result := Result{
@@ -122,7 +122,7 @@ func worker(id int, tasks <-chan Task, results chan<- Result) { // wait to recei
 		if err != nil {
 			result.Err = err
 		} else {
-			fmt.Printf("worker: %d path: %s size: %d\n", id, string(t), fi.Size())
+			fmt.Printf("calculator: %d path: %s size: %d\n", id, string(t), fi.Size())
 			result.value = fi.Size()
 		}
 
