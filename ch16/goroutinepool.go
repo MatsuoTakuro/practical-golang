@@ -200,6 +200,7 @@ func callExternalAPI() (value int64, err error) {
 	if err != nil {
 		return 0, err
 	}
+	defer resp.Body.Close()
 
 	var v int64
 	if v = int64(resp.StatusCode); v != 200 {
