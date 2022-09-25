@@ -148,6 +148,7 @@ func poolWithRateLimit() {
 	var remainedCount int64
 	go func() {
 		sampleTasks := []Task{"first", "second", "third"}
+
 		for _, t := range sampleTasks {
 			atomic.AddInt64(&remainedCount, 1)
 			tasks <- t
@@ -172,7 +173,6 @@ func poolWithRateLimit() {
 			}
 		}
 	}
-
 }
 
 func workerWithRateLimit(rt ratelimit.Limiter, tasks <-chan Task, results chan<- Result) {
