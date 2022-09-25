@@ -4,5 +4,6 @@ func Sub() {
 	// goroutine()
 	// lock()
 	// workerPool()
-	controlBySelect()
+	// controlBySelect()
+	errorEventWithContext()
 }
