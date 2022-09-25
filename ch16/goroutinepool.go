@@ -4,15 +4,18 @@ import (
 	"fmt"
 	"io/fs"
 	"log"
+	"net/http"
 	"os"
 	"path/filepath"
 	"runtime"
 	"sync/atomic"
+
+	"go.uber.org/ratelimit"
 )
 
 func workerPool() {
 
-	fmt.Println("TotalFileSize()", TotalFileSize())
+	// fmt.Println("TotalFileSize()", TotalFileSize())
 
 	// taskSrcs := []Task{
 	// 	"/Users/user/training/go/practical-golang/ch16/goroutine.go",
@@ -21,6 +24,8 @@ func workerPool() {
 	// 	"/Users/user/training/go/practical-golang/ch16/sub.go",
 	// }
 	// fmt.Println("TotalFileSizeWithFixedTasks()", TotalFileSizeWithFixedTasks(taskSrcs))
+
+	poolWithRateLimit()
 }
 
 type Task string
@@ -128,4 +133,78 @@ func fileSizeCalculator(id int, tasks <-chan Task, results chan<- Result) { // w
 
 		results <- result // transmit a result
 	}
+}
+
+func poolWithRateLimit() {
+	tasks := make(chan Task, 100)
+	results := make(chan Result)
+
+	rl := ratelimit.New(100)
+	for i := 0; i < runtime.NumCPU(); i++ {
+		go workerWithRateLimit(rl, tasks, results)
+	}
+
+	inputDone := make(chan struct{})
+	var remainedCount int64
+	go func() {
+		sampleTasks := []Task{"first", "second", "third"}
+		for _, t := range sampleTasks {
+			atomic.AddInt64(&remainedCount, 1)
+			tasks <- t
+		}
+		close(inputDone)
+		close(tasks)
+	}()
+
+	for {
+		select {
+		case result := <-results:
+			if result.Err != nil {
+				fmt.Printf("err %v for %s\n", result.Err, result.Task)
+			} else {
+				fmt.Printf("task: %s api request was successful(%d)!\n", result.Task, result.value)
+			}
+			atomic.AddInt64(&remainedCount, -1)
+		case <-inputDone:
+			if remainedCount == 0 {
+				fmt.Printf("calling api is finised.\n")
+				return
+			}
+		}
+	}
+
+}
+
+func workerWithRateLimit(rt ratelimit.Limiter, tasks <-chan Task, results chan<- Result) {
+	for t := range tasks {
+		fmt.Printf("Let's get started to work on task: %s!\n", t)
+
+		rt.Take()
+		v, err := callExternalAPI()
+		if err != nil {
+			err = fmt.Errorf("task: %s error: %v", t, err)
+		}
+
+		result := Result{
+			value: v,
+			Task:  t,
+			Err:   err,
+		}
+		results <- result
+	}
+}
+
+func callExternalAPI() (value int64, err error) {
+	resp, err := http.Get("https://example.com")
+
+	if err != nil {
+		return 0, err
+	}
+
+	var v int64
+	if v = int64(resp.StatusCode); v != 200 {
+		return 0, err
+	}
+
+	return v, nil
 }
