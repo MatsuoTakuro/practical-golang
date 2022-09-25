@@ -5,5 +5,6 @@ func Sub() {
 	// lock()
 	// workerPool()
 	// controlBySelect()
-	errorEventWithContext()
+	// errorEventWithContext()
+	fanOutAndFanIn()
 }
