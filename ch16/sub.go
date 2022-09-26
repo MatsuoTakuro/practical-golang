@@ -6,5 +6,7 @@ func Sub() {
 	// workerPool()
 	// controlBySelect()
 	// errorEventWithContext()
-	fanOutAndFanIn()
+	// fanOutAndFanIn()
+	// futureAndPromise()
+	session()
 }
