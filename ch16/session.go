@@ -7,16 +7,18 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
+	"time"
 )
 
 func session() {
-	v1()
-	v2()
+	// tokenWithContext()
+	// tokenWithHttpRequest()
+	loggerWithContext()
 }
 
 var tokenContextKey = struct{}{} // make it private
 
-func v1() {
+func tokenWithContext() {
 	ctx := context.Background()
 	token := "xxxx"
 	ctx2 := RegisterToken(ctx, token)
@@ -38,7 +40,7 @@ func RetrieveToken(ctx context.Context) (string, error) {
 	return token, nil
 }
 
-func v2() {
+func tokenWithHttpRequest() {
 	http.HandleFunc("/token", func(writer http.ResponseWriter, req *http.Request) {
 		token := NewToken(10)
 		req2 := RegisterToken2(req, token)
@@ -71,4 +73,59 @@ func RetrieveToken2(req *http.Request) (string, error) {
 		return "", errors.New("TOKEN IS NOT REGISTERED")
 	}
 	return token, nil
+}
+
+var logContextKey = struct{}{}
+
+func loggerWithContext() {
+	http.HandleFunc("/logger", func(writer http.ResponseWriter, req *http.Request) {
+		req2 := StartLogging(req)
+		err := CountAccess(req2.Context())
+		if err != nil {
+			writer.WriteHeader(http.StatusInternalServerError)
+			_, _ = writer.Write([]byte("Standard error message."))
+		}
+		l, err := FinishLogging(req2)
+		if err != nil {
+			writer.WriteHeader(http.StatusInternalServerError)
+			_, _ = writer.Write([]byte("Standard error message."))
+		}
+		fmt.Fprintf(writer, "LogRecord; start: %v Duration: %v DBAccessCount: %d\n", l.start, l.Duration, l.DBAccessCount)
+	})
+
+	log.Fatal(http.ListenAndServe(":8080", nil))
+}
+
+type LogRecord struct {
+	start         time.Time
+	Duration      time.Duration
+	DBAccessCount int
+}
+
+func StartLogging(req *http.Request) *http.Request {
+	l := &LogRecord{
+		start:         time.Now(),
+		Duration:      0,
+		DBAccessCount: 0,
+	}
+	ctx := context.WithValue(req.Context(), logContextKey, l)
+	return req.WithContext(ctx)
+}
+
+func CountAccess(ctx context.Context) error {
+	l, ok := ctx.Value(logContextKey).(*LogRecord)
+	if !ok {
+		return errors.New("LOGGER IS NOT REGISTERED")
+	}
+	l.DBAccessCount += 1
+	return nil
+}
+
+func FinishLogging(req *http.Request) (*LogRecord, error) {
+	l, ok := req.Context().Value(logContextKey).(*LogRecord)
+	if !ok {
+		return nil, errors.New("LOGGER IS NOT REGISTERED")
+	}
+	l.Duration = time.Since(l.start)
+	return l, nil
 }
