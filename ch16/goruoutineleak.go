@@ -109,7 +109,7 @@ func NewInfiniteCounter() *InfiniteCounter {
 			}
 		}
 	}()
-	return ic // result
+	return ic
 }
 
 func (ic *InfiniteCounter) Close() {
