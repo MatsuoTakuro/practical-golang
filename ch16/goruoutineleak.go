@@ -1,15 +1,19 @@
 package ch16
 
 import (
+	"bytes"
 	"context"
 	"fmt"
+	"io"
+	"os"
 	"time"
 )
 
 func goroutineLeak() {
 	// receiveInForStatement()
 	// transmitInForStatement()
-	closeChannelByCloseMethod()
+	// closeChannelByCloseMethod()
+	leakByOtherThanLoop()
 }
 
 func receiveInForStatement() {
@@ -79,11 +83,11 @@ func transmitInForStatement() {
 
 func closeChannelByCloseMethod() {
 	ic := NewInfiniteCounter()
-	fmt.Println(<-ic.Counter)
-	fmt.Println(<-ic.Counter)
-	fmt.Println(<-ic.Counter)
+	fmt.Println("ic.Counter", <-ic.Counter) // receive
+	fmt.Println("ic.Counter", <-ic.Counter) // receive
+	fmt.Println("ic.Counter", <-ic.Counter) // receive
 	ic.Close()
-	fmt.Println(<-ic.Counter) // zero value cuz Continue channel is closed.
+	fmt.Println("ic.Counter", <-ic.Counter) // receive zero value cuz Continue channel is closed.
 }
 
 type InfiniteCounter struct {
@@ -101,9 +105,9 @@ func NewInfiniteCounter() *InfiniteCounter {
 		count := 0
 		for {
 			select {
-			case ic.Counter <- count:
+			case ic.Counter <- count: // transmitted?
 				count++
-			case <-ic.exit:
+			case <-ic.exit: // received?
 				close(ic.Counter)
 				return
 			}
@@ -114,4 +118,43 @@ func NewInfiniteCounter() *InfiniteCounter {
 
 func (ic *InfiniteCounter) Close() {
 	close(ic.exit)
+}
+
+func leakByOtherThanLoop() {
+	go func() {
+		for {
+			time.Sleep(time.Second)
+		}
+	}()
+
+	wait := make(chan struct{})
+	go func() {
+		// NG
+		// f, err := os.Open("important.txt")
+		// if err != nil {
+		// 	return // without close(wait)
+		// }
+		// var buffer bytes.Buffer
+		// _, err = io.Copy(&buffer, f)
+		// if err != nil {
+		// 	return // without close(wait)
+		// }
+		// close(wait)
+
+		// OK
+		defer func() {
+			fmt.Println("defer called")
+			close(wait)
+		}()
+		f, err := os.Open("important.txt")
+		if err != nil {
+			return // without close(wait)
+		}
+		var buffer bytes.Buffer
+		_, err = io.Copy(&buffer, f)
+		if err != nil {
+			return // without close(wait)
+		}
+	}()
+	<-wait // transmit
 }
