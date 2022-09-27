@@ -8,5 +8,6 @@ func Sub() {
 	// errorEventWithContext()
 	// fanOutAndFanIn()
 	// futureAndPromise()
-	session()
+	// session()
+	goroutineLeak()
 }
