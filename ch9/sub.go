@@ -24,7 +24,7 @@ func Sub() {
 	// rollbackWithDefer()
 	// seperateTxCtrlAndImpl()
 	// cancel()
-	// loggingWithDriver()
+	loggingWithDriver()
 	// loggingWithExtendedDriver()
 	// preparedStmt()
 	// batchInsert()
@@ -32,7 +32,7 @@ func Sub() {
 	// commonColumns()
 	// sqlboiler()
 	// sqlc()
-	withGorm()
+	// withGorm()
 }
 
 var configValues string = "host=localhost port=5432 user=testuser dbname=testdb password=pass sslmode=disable"
