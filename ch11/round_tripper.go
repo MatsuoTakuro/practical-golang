@@ -17,8 +17,8 @@ func roundTripper() {
 	// custom()
 	// logging()
 	// basicAuth()
-	// retry()
-	retryWithJitter()
+	retry()
+	retryWithRetryablehttp()
 }
 
 type customRoundTripper struct {
@@ -38,6 +38,8 @@ func (c customRoundTripper) RoundTrip(req *http.Request) (*http.Response, error)
 }
 
 func custom() {
+	fmt.Println()
+	fmt.Println("custom")
 	clt := &http.Client{
 		Transport: &customRoundTripper{
 			base: http.DefaultTransport,
@@ -55,13 +57,13 @@ func custom() {
 		panic(err)
 	}
 	defer resp.Body.Close()
-	fmt.Println("Status code is\n", resp.StatusCode)
+	log.Println("Status code is", resp.StatusCode)
 
-	body, err := ioutil.ReadAll(resp.Body)
+	_, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Println(err)
 	}
-	fmt.Println("Body is as follows;\n", string(body))
+	// fmt.Println("Body is as follows;\n", string(body))
 }
 
 type loggingRoundTripper struct {
@@ -80,13 +82,15 @@ func (t *loggingRoundTripper) RoundTrip(req *http.Request) (*http.Response, erro
 		return nil, err
 	}
 	if resp != nil {
-		t.logger("%s %s %d %s, duration: %d",
+		t.logger("%s %s %d %s, duration: %d ms",
 			req.Method, req.URL.String(), resp.StatusCode, http.StatusText(resp.StatusCode), time.Since(start).Milliseconds())
 	}
 	return resp, err
 }
 
 func logging() {
+	fmt.Println()
+	fmt.Println("logging")
 	clt := &http.Client{
 		Transport: &loggingRoundTripper{
 			base: http.DefaultTransport,
@@ -104,19 +108,19 @@ func logging() {
 		panic(err)
 	}
 	defer resp.Body.Close()
-	fmt.Println("Status code is\n", resp.StatusCode)
+	log.Println("Status code is", resp.StatusCode)
 
-	body, err := ioutil.ReadAll(resp.Body)
+	_, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Println(err)
 	}
-	fmt.Println("Body is as follows;\n", string(body))
+	// fmt.Println("Body is as follows;\n", string(body))
 }
 
 type basicAuthRoundTripper struct {
+	base     http.RoundTripper
 	username string
 	password string
-	base     http.RoundTripper
 }
 
 func (rt *basicAuthRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
@@ -155,7 +159,7 @@ func basicAuth() {
 		panic(err)
 	}
 	defer resp.Body.Close()
-	fmt.Println("Status code is\n", resp.StatusCode)
+	log.Println("Status code is", resp.StatusCode)
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
@@ -165,6 +169,8 @@ func basicAuth() {
 }
 
 func retry() {
+	fmt.Println()
+	fmt.Println("retry")
 	clt := &http.Client{
 		Transport: &retryRoundTripper{
 			base:     http.DefaultTransport,
@@ -184,13 +190,13 @@ func retry() {
 		panic(err)
 	}
 	defer resp.Body.Close()
-	fmt.Println("Status code is\n", resp.StatusCode)
+	log.Println("Status code is", resp.StatusCode)
 
-	body, err := ioutil.ReadAll(resp.Body)
+	_, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Println(err)
 	}
-	fmt.Println("Body is as follows;\n", string(body))
+	// fmt.Println("Body is as follows;\n", string(body))
 }
 
 type retryRoundTripper struct {
@@ -222,6 +228,7 @@ func (rt *retryRoundTripper) RoundTrip(req *http.Request) (*http.Response, error
 		err  error
 	)
 	for count := 0; count < rt.attempts; count++ {
+		log.Println("count:", count)
 		resp, err = rt.base.RoundTrip(req)
 
 		if !rt.shouldRetry(resp, err) {
@@ -239,7 +246,9 @@ func (rt *retryRoundTripper) RoundTrip(req *http.Request) (*http.Response, error
 	return resp, err
 }
 
-func retryWithJitter() {
+func retryWithRetryablehttp() {
+	fmt.Println()
+	fmt.Println("retryWithRetryablehttp")
 	clt := retryablehttp.NewClient()
 	clt.RetryMax = 2
 
@@ -254,11 +263,11 @@ func retryWithJitter() {
 		panic(err)
 	}
 	defer resp.Body.Close()
-	fmt.Println("Status code is\n", resp.StatusCode)
+	log.Println("Status code is", resp.StatusCode)
 
-	body, err := ioutil.ReadAll(resp.Body)
+	_, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Println(err)
 	}
-	fmt.Println("Body is as follows;\n", string(body))
+	// fmt.Println("Body is as follows;\n", string(body))
 }
