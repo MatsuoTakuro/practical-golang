@@ -17,6 +17,13 @@ func roundTripper() {
 	// custom()
 	// logging()
 	// basicAuth()
+	go func() {
+		err := runDummyServer()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}()
+	time.Sleep(5 * time.Millisecond)
 	retry()
 	retryWithRetryablehttp()
 }
@@ -57,13 +64,13 @@ func custom() {
 		panic(err)
 	}
 	defer resp.Body.Close()
-	log.Println("Status code is", resp.StatusCode)
+	log.Println("status:", resp.StatusCode)
 
-	_, err = ioutil.ReadAll(resp.Body)
+	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Println(err)
 	}
-	// fmt.Println("Body is as follows;\n", string(body))
+	fmt.Println("body:\n", string(body))
 }
 
 type loggingRoundTripper struct {
@@ -108,13 +115,13 @@ func logging() {
 		panic(err)
 	}
 	defer resp.Body.Close()
-	log.Println("Status code is", resp.StatusCode)
+	log.Println("status:", resp.StatusCode)
 
-	_, err = ioutil.ReadAll(resp.Body)
+	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Println(err)
 	}
-	// fmt.Println("Body is as follows;\n", string(body))
+	fmt.Println("body:\n", string(body))
 }
 
 type basicAuthRoundTripper struct {
@@ -159,13 +166,13 @@ func basicAuth() {
 		panic(err)
 	}
 	defer resp.Body.Close()
-	log.Println("Status code is", resp.StatusCode)
+	log.Println("status:", resp.StatusCode)
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Println(err)
 	}
-	fmt.Println("Body is as follows;\n", string(body))
+	fmt.Println("body:\n", string(body))
 }
 
 func retry() {
@@ -174,13 +181,13 @@ func retry() {
 	clt := &http.Client{
 		Transport: &retryRoundTripper{
 			base:     http.DefaultTransport,
-			attempts: 5,
-			waitTime: 5 * time.Second,
+			attempts: 3,
+			waitTime: 3 * time.Second,
 		},
 	}
 
 	ctx := context.Background()
-	req, err := http.NewRequestWithContext(ctx, "GET", "http://example.com", nil)
+	req, err := http.NewRequestWithContext(ctx, "GET", "http://localhost:8111/dummy", nil)
 	if err != nil {
 		panic(err)
 	}
@@ -190,13 +197,13 @@ func retry() {
 		panic(err)
 	}
 	defer resp.Body.Close()
-	log.Println("Status code is", resp.StatusCode)
+	log.Println("finally, status:", resp.StatusCode)
 
-	_, err = ioutil.ReadAll(resp.Body)
+	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Println(err)
 	}
-	// fmt.Println("Body is as follows;\n", string(body))
+	log.Println("finally, body:", string(body))
 }
 
 type retryRoundTripper struct {
@@ -209,12 +216,14 @@ func (rt *retryRoundTripper) shouldRetry(resp *http.Response, err error) bool {
 	if err != nil {
 		var netErr net.Error
 		if errors.As(err, &netErr) && netErr.Timeout() {
+			log.Println("resp status:", resp.StatusCode)
 			return true
 		}
 	}
 
 	if resp != nil {
 		if resp.StatusCode == 429 || (500 <= resp.StatusCode && resp.StatusCode <= 504) {
+			log.Println("resp status:", resp.StatusCode)
 			return true
 		}
 	}
@@ -228,7 +237,7 @@ func (rt *retryRoundTripper) RoundTrip(req *http.Request) (*http.Response, error
 		err  error
 	)
 	for count := 0; count < rt.attempts; count++ {
-		log.Println("count:", count)
+		log.Println("attempt count:", count)
 		resp, err = rt.base.RoundTrip(req)
 
 		if !rt.shouldRetry(resp, err) {
@@ -242,6 +251,7 @@ func (rt *retryRoundTripper) RoundTrip(req *http.Request) (*http.Response, error
 		case <-time.After(rt.waitTime): // wait for retry
 		}
 	}
+	log.Println("attempts are over")
 
 	return resp, err
 }
@@ -249,25 +259,29 @@ func (rt *retryRoundTripper) RoundTrip(req *http.Request) (*http.Response, error
 func retryWithRetryablehttp() {
 	fmt.Println()
 	fmt.Println("retryWithRetryablehttp")
-	clt := retryablehttp.NewClient()
-	clt.RetryMax = 2
+	retryableClt := retryablehttp.NewClient()
+	retryableClt.RetryMax = 3
+	retryableClt.Backoff = retryablehttp.LinearJitterBackoff // instead of DefaultBackoff
+	// get a small amount of jitter centered around one second increasing each retry
+	retryableClt.RetryWaitMin = 800 * time.Millisecond
+	retryableClt.RetryWaitMax = 1200 * time.Millisecond
 
 	ctx := context.Background()
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, "http://example.com/", nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, "http://localhost:8111/dummy", nil)
 	if err != nil {
 		panic(err)
 	}
 
-	resp, err := clt.StandardClient().Do(req)
+	resp, err := retryableClt.StandardClient().Do(req)
 	if err != nil {
 		panic(err)
 	}
 	defer resp.Body.Close()
-	log.Println("Status code is", resp.StatusCode)
+	log.Println("finally, status:", resp.StatusCode)
 
-	_, err = ioutil.ReadAll(resp.Body)
+	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Println(err)
 	}
-	// fmt.Println("Body is as follows;\n", string(body))
+	log.Println("finally, body:", string(body))
 }
